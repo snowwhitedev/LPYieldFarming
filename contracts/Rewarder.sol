@@ -8,26 +8,26 @@ import "./interfaces/IRewarder.sol";
 import "./libraries/TransferHelper.sol";
 
 contract Rewarder is IRewarder, Ownable {
-    address public immutable SB;
-    address public immutable SB_MASTER_CHEF;
+    address public immutable UNO;
+    address public immutable UNO_MASTER_CHEF;
 
-    constructor(address _SB, address _SB_MASTER_CHEF) {
-        SB = _SB;
-        SB_MASTER_CHEF = _SB_MASTER_CHEF;
+    constructor(address _UNO, address _UNO_MASTER_CHEF) {
+        UNO = _UNO;
+        UNO_MASTER_CHEF = _UNO_MASTER_CHEF;
     }
 
     modifier onlyMasterChef() {
-        require(msg.sender == SB_MASTER_CHEF, "Only SBMasterChef can call this function.");
+        require(msg.sender == UNO_MASTER_CHEF, "Only Insurance can call this function.");
         _;
     }
 
-    function onSBReward(address to, uint256 amount) external override onlyMasterChef returns (uint256) {
-        uint256 rewardBal = IERC20(SB).balanceOf(address(this));
+    function onReward(address to, uint256 amount) external override onlyMasterChef returns (uint256) {
+        uint256 rewardBal = IERC20(UNO).balanceOf(address(this));
         if (amount > rewardBal) {
             amount = rewardBal;
         }
 
-        TransferHelper.safeTransfer(SB, to, amount);
+        TransferHelper.safeTransfer(UNO, to, amount);
         return amount;
     }
 
